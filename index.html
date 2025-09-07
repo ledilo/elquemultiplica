@@ -9,10 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#000; --text:#fff; --muted:#b6c3d3;
-      --primary:#00E5FF; /* azul neon */
-      --primary-2:#3B82F6; /* fallback */
-      --wa:#25D366;
+      --bg:#000;
+      --text:#fff;
+      --muted:#b6c3d3;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;overflow:hidden}
@@ -25,30 +24,14 @@
     .logo{max-width:140px;width:60%;height:auto;margin-bottom:12px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.8))}
     .bonus-img{max-width:260px;width:75%;height:auto;margin:0 auto 10px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.6))}
     .minimo{font-size:16px;color:var(--muted);margin-bottom:16px;font-weight:600}
-
-    /* --- Subscribe CTA --- */
-    .cta-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
-    .btn-sub{appearance:none;border:none;cursor:pointer;user-select:none;
-      font-family:Poppins,Inter,system-ui,sans-serif;font-weight:800;letter-spacing:.5px;
-      font-size:20px; padding:14px 28px; border-radius:999px; 
-      background:linear-gradient(90deg,var(--primary),var(--primary-2));
-      color:#000; text-shadow:0 1px 0 rgba(255,255,255,.3);
-      box-shadow:0 8px 24px rgba(0,229,255,.3), inset 0 -2px 0 rgba(0,0,0,.3);
-      transition:transform .15s ease, box-shadow .3s ease, filter .3s ease;
-      animation:floaty 3s ease-in-out infinite, glow 2.5s ease-in-out infinite alternate;
+    .btn-wa{display:inline-block;animation:floaty 3s ease-in-out infinite, glow 2.5s ease-in-out infinite alternate}
+    .btn-wa img{width:240px;height:auto;display:block}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    @keyframes glow{
+      0%{filter:drop-shadow(0 0 0 rgba(37,211,102,.0))}
+      100%{filter:drop-shadow(0 0 12px rgba(37,211,102,.6))}
     }
-    .btn-sub:active{transform:translateY(1px) scale(.99)}
-    .btn-sub .i{margin-left:8px; font-size:22px}
-
-    .nudge{font-size:14px;color:#cfe8ff;max-width:320px;line-height:1.3}
-
-    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-    @keyframes glow{0%{filter:drop-shadow(0 0 0 rgba(0,229,255,0))}100%{filter:drop-shadow(0 0 12px rgba(0,229,255,.65))}}
-
     footer{padding:10px;color:#9fb3c8;font-size:12px;text-align:center;width:100%;background:transparent;position:absolute;bottom:0;left:0}
-
-    /* Safe area for tall phones */
-    @media (max-height:640px){ .bonus-img{max-width:220px} .btn-sub{font-size:18px;padding:12px 22px} }
   </style>
 </head>
 <body>
@@ -58,34 +41,34 @@
   <img src="bonus.png" alt="BONO" class="bonus-img"/>
   <!-- Minimo -->
   <div class="minimo">Mínimo de carga: $1000</div>
+  <!-- BOTÓN WA -->
+  <a class="btn-wa" id="waLink" href="#" target="_blank" rel="noopener">
+    <img src="wa-btn.png" alt="WhatsApp"/>
+  </a>
 
-  <!-- CTA SUBSCRIBE (abre WhatsApp con mensaje) -->
-  <div class="cta-wrap">
-    <!--
-      IMPORTANTE: 
-      - Este botón dispara el evento de Pixel "Subscribe" y luego abre WhatsApp con un mensaje prellenado.
-      - Si más adelante preferís un form de email en vez de WhatsApp, dejé un bloque opcional más abajo (comentado).
-    -->
-    <a id="ctaLink" class="btn-sub" href="#" target="_blank" rel="noopener" aria-label="Suscribirme por WhatsApp">
-      SUSCRIBIRME <span class="i">📲</span>
-    </a>
-    <div class="nudge">👉 <strong>Recordá escribir "Si"</strong> ✅ así te pasamos al otro número y activan tu <strong>BONUS 🎁🔥</strong></div>
-  </div>
-
-  <footer>+18 | Entretenimiento</footer>
+  <footer>
+    +18 | Entretenimiento
+  </footer>
 
   <!-- Meta Pixel Code -->
   <script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '1862917477977535');
   fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1862917477977535&ev=PageView&noscript=1"/></noscript>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1862917477977535&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel Code -->
 
   <script>
     // ==========================
-    // ENLACES DE WHATSAPP (rotación + ?src=)
+    // EDITÁ TUS 5 ENLACES ACÁ
     // ==========================
     const waLinks = [
       'https://wa.link/krbeu6', // 1
@@ -96,46 +79,37 @@
       'https://wa.link/u8rcp9'  // 3ADV
     ];
 
-    // Mensaje prellenado para WhatsApp
-    const waMsg = encodeURIComponent('Hola, quiero SUSCRIBIRME y activar mi BONUS ✅');
-
-    function getSrcParam(){
+    // Opcional: forzar por parámetro ?src=1..5
+    function getSrcParam() {
       const p = new URLSearchParams(location.search).get('src');
       const n = Number(p);
       if (!Number.isNaN(n) && n >= 1 && n <= waLinks.length) return n;
       return null;
     }
-    function pickLink(){
+
+    function pickLink() {
+      // 1) Si viene ?src=1..5, usar ese
       const forced = getSrcParam();
       if (forced) return waLinks[forced - 1];
+
+      // 2) Si ya elegimos uno en esta sesión, devolver el mismo
       const KEY = 'wa_idx';
       let idx = sessionStorage.getItem(KEY);
       if (idx !== null) return waLinks[+idx];
+
+      // 3) Sino, elegir uno al azar y guardarlo
       idx = Math.floor(Math.random() * waLinks.length);
       sessionStorage.setItem(KEY, idx);
       return waLinks[idx];
     }
 
-    const cta = document.getElementById('ctaLink');
-    const base = pickLink();
-    // Si el link ya tiene query, usamos &text=; si no, usamos ?text=
-    const hasQuery = base.includes('?');
-    cta.href = base + (hasQuery ? '&' : '?') + 'text=' + waMsg;
+    const waBtn = document.getElementById('waLink');
+    waBtn.href = pickLink();
 
-    // Pixel: SUBSCRIBE
-    cta.addEventListener('click', () => {
-      // Estándar de Meta: Subscribe
+    // Dispara "Subscribe" al click
+    waBtn.addEventListener('click', () => {
       fbq('track', 'Subscribe');
     });
   </script>
-
-  <!-- ===============================
-       OPCIONAL: FORM DE EMAIL (sin backend)
-       Descomentar para usar un form simple que dispara "Subscribe" y abre WhatsApp como fallback.
-  <form onsubmit="fbq('track','Subscribe'); window.open(cta.href,'_blank'); return false;" style="margin-top:14px">
-    <input type="email" required placeholder="Tu email" style="padding:10px 12px;border-radius:10px;border:1px solid #2b2b2b;background:#0b0f14;color:#e7f1ff;outline:none;min-width:240px" />
-    <button type="submit" class="btn-sub" style="margin-top:10px">SUSCRIBIRME 📩</button>
-  </form>
-  =============================== -->
 </body>
 </html>
