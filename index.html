@@ -67,49 +67,67 @@
   <!-- End Meta Pixel Code -->
 
   <script>
-    // ==========================
-    // EDITÁ TUS 5 ENLACES ACÁ
-    // ==========================
-    const waLinks = [
-      'https://wa.link/krbeu6', // 1
-      'https://wa.link/i8hzpf', // 2
-      'https://wa.link/lh6r24', // 3
-      'https://wa.link/gp0vtp', // 1ADV
-      'https://wa.link/mp7fqw', // 2ADV
-      'https://wa.link/u8rcp9'  // 3ADV
-    ];
+  // ==========================
+  // EDITÁ TUS 5 ENLACES ACÁ
+  // ==========================
+  const waLinks = [
+    'https://wa.link/6z545p', // 1
+    'https://wa.link/xzds9b', // 2
+    'https://wa.link/5rdwjj', // 3
+    'https://wa.link/mmwtf5', // 4
+    'https://wa.link/j0ho1a', // 5
+    'https://wa.link/2nw8tu'  // 6
+  ];
 
-    // Opcional: forzar por parámetro ?src=1..5
-    function getSrcParam() {
-      const p = new URLSearchParams(location.search).get('src');
-      const n = Number(p);
-      if (!Number.isNaN(n) && n >= 1 && n <= waLinks.length) return n;
-      return null;
+  function getSrcParam() {
+    const p = new URLSearchParams(location.search).get('src');
+    const n = Number(p);
+    if (!Number.isNaN(n) && n >= 1 && n <= waLinks.length) return n;
+    return null;
+  }
+
+  function pickLink() {
+    const forced = getSrcParam();
+    if (forced) return waLinks[forced - 1];
+
+    const KEY = 'wa_idx';
+    let idx = sessionStorage.getItem(KEY);
+    if (idx !== null) return waLinks[+idx];
+
+    idx = Math.floor(Math.random() * waLinks.length);
+    sessionStorage.setItem(KEY, idx);
+    return waLinks[idx];
+  }
+
+  const waBtn = document.getElementById('waLink');
+  waBtn.href = pickLink();
+
+  // Helpers cookies fbp/fbc
+  function getCookie(name){
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
+  }
+
+  waBtn.addEventListener('click', async () => {
+    // 1) generar event_id
+    const event_id = 'evt_' + Math.random().toString(36).slice(2) + Date.now();
+
+    // 2) Pixel navegador
+    fbq('track', 'Subscribe', {}, { eventID: event_id });
+
+    // 3) Conversion API (via endpoint)
+    try {
+      await fetch('/api/meta-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_id,
+          fbp: getCookie('_fbp') || undefined,
+          fbc: getCookie('_fbc') || undefined
+        })
+      });
+    } catch (e) {
+      console.error('CAPI error', e);
     }
-
-    function pickLink() {
-      // 1) Si viene ?src=1..5, usar ese
-      const forced = getSrcParam();
-      if (forced) return waLinks[forced - 1];
-
-      // 2) Si ya elegimos uno en esta sesión, devolver el mismo
-      const KEY = 'wa_idx';
-      let idx = sessionStorage.getItem(KEY);
-      if (idx !== null) return waLinks[+idx];
-
-      // 3) Sino, elegir uno al azar y guardarlo
-      idx = Math.floor(Math.random() * waLinks.length);
-      sessionStorage.setItem(KEY, idx);
-      return waLinks[idx];
-    }
-
-    const waBtn = document.getElementById('waLink');
-    waBtn.href = pickLink();
-
-    // Dispara "Subscribe" al click
-    waBtn.addEventListener('click', () => {
-      fbq('track', 'Subscribe');
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
