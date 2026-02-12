@@ -108,7 +108,7 @@
     const event_id = 'evt_' + Math.random().toString(36).slice(2) + Date.now();
 
     // 2) Pixel navegador
-    fbq('track', 'Subscribe', {}, { eventID: event_id });
+    fbq('track', 'Purchase', {}, { eventID: event_id });
 
     // 3) Conversion API (via endpoint)
     try {
