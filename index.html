@@ -103,24 +103,29 @@
     return m ? m.pop() : '';
   }
 
-  waBtn.addEventListener('click', async () => {
-    // 1) generar event_id
+  // Modifica el evento click en tu script de la imagen 4
+waBtn.addEventListener('click', async (e) => {
     const event_id = 'evt_' + Math.random().toString(36).slice(2) + Date.now();
+    const fbp = getCookie('_fbp') || '';
+    const fbc = getCookie('_fbc') || '';
 
-    // 2) Pixel navegador
+    // 1. Track Purchase en el navegador
     fbq('track', 'Purchase', {}, { eventID: event_id });
 
-    // 3) Conversion API (via endpoint)
-    try {
-      await fetch('/api/meta-subscribe', {
+    // 2. Enviar a tu API
+    fetch('/api/meta-subscribe', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          event_id,
-          fbp: getCookie('_fbp') || undefined,
-          fbc: getCookie('_fbc') || undefined
-        })
-      });
+        body: JSON.stringify({ event_id, fbp, fbc })
+    });
+
+    // 3. TRUCO PARA KOMMO: Agregamos los IDs al mensaje
+    const originalHref = waBtn.href; 
+    const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
+    
+    // Abrimos el WhatsApp con los IDs pegados al mensaje
+    window.open(nuevoMensaje, '_blank');
+});
     } catch (e) {
       console.error('CAPI error', e);
     }
