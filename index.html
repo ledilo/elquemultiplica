@@ -67,58 +67,49 @@
   <!-- End Meta Pixel Code -->
 
   <script>
-  // ==========================
-  // EDITÁ TUS 5 ENLACES ACÁ
-  // ==========================
-  const waLinks = [
-    'https://wa.me/542617524426?text=Hola,%20me%20interesa', // 1
-  ];
+  <script>
+// 1. Configuración de enlaces
+const waLinks = [
+  'https://wa.me/542617524426?text=Hola,%20me%20interesa',
+];
 
-  function getSrcParam() {
-    const p = new URLSearchParams(location.search).get('src');
-    const n = Number(p);
-    if (!Number.isNaN(n) && n >= 1 && n <= waLinks.length) return n;
-    return null;
-  }
+function pickLink() {
+    return waLinks[0];
+}
 
-  function pickLink() {
-    const forced = getSrcParam();
-    if (forced) return waLinks[forced - 1];
+const waBtn = document.getElementById('waLink');
+if (waBtn) waBtn.href = pickLink();
 
-    const KEY = 'wa_idx';
-    let idx = sessionStorage.getItem(KEY);
-    if (idx !== null) return waLinks[+idx];
-
-    idx = Math.floor(Math.random() * waLinks.length);
-    sessionStorage.setItem(KEY, idx);
-    return waLinks[idx];
-  }
-
-  const waBtn = document.getElementById('waLink');
-  waBtn.href = pickLink();
-
-  // Helpers cookies fbp/fbc
-  function getCookie(name){
+// 2. Función para leer cookies de Meta
+function getCookie(name) {
     const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     return m ? m.pop() : '';
-  }
+}
 
-  // Localiza esta parte en tu script (Imagen 27)
-waBtn.addEventListener('click', async (e) => {
-    e.preventDefault(); // <--- AGREGA ESTA LÍNEA AQUÍ (Es vital)
+// 3. El evento CLICK con bloqueo de pestaña duplicada
+if (waBtn) {
+    waBtn.addEventListener('click', async (e) => {
+        // ESTO DETIENE LA WEB Y EVITA QUE SE ABRA OTRA PESTAÑA IGUAL
+        e.preventDefault(); 
+        e.stopPropagation();
 
-    const event_id = 'evt_' + Math.random().toString(36).slice(2) + Date.now();
-    const fbp = getCookie('_fbp') || '';
-    const fbc = getCookie('_fbc') || '';
+        const fbp = getCookie('_fbp') || '';
+        const fbc = getCookie('_fbc') || '';
 
-    // ... (el resto del código de track y fetch sigue igual) ...
+        // Avisamos a Facebook del intento de compra
+        if (typeof fbq === 'function') {
+            fbq('track', 'Purchase', {value: 0, currency: 'USD'});
+        }
 
-    const originalHref = waBtn.href;
-    const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
+        // Construimos el mensaje final para Kommo
+        const originalHref = waBtn.href;
+        const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
 
-    // Esto ahora sí funcionará porque detuvimos el comportamiento viejo
-    window.location.href = nuevoMensaje; 
-});
+        // LANZAMIENTO FORZADO: Esto cierra el navegador y abre la App
+        window.location.replace(nuevoMensaje);
+    });
+}
+</script>
     } catch (e) {
       console.error('CAPI error', e);
     }
