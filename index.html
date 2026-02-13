@@ -119,12 +119,12 @@ waBtn.addEventListener('click', async (e) => {
         body: JSON.stringify({ event_id, fbp, fbc })
     });
 
-    // 3. TRUCO PARA KOMMO: Agregamos los IDs al mensaje
-    const originalHref = waBtn.href; 
-    const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
-    
-    // Abrimos el WhatsApp con los IDs pegados al mensaje
-    window.open(nuevoMensaje, '_blank');
+    // Cambia la parte final de tu script (Imagen 6)
+const originalHref = waBtn.href; 
+const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
+
+// En lugar de window.open, usa esto:
+window.location.href = nuevoMensaje;
 });
     } catch (e) {
       console.error('CAPI error', e);
