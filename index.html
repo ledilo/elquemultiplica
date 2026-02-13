@@ -65,13 +65,9 @@
   <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=944228244845616&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel Code -->
-
   <script>
-  <script>
-// 1. Configuración de enlaces
-const waLinks = [
-  'https://wa.me/542617524426?text=Hola,%20me%20interesa',
-];
+// 1. Configuración de enlace
+const waLinks = ['https://wa.me/542617524426?text=Hola,%20me%20interesa'];
 
 function pickLink() {
     return waLinks[0];
@@ -86,32 +82,27 @@ function getCookie(name) {
     return m ? m.pop() : '';
 }
 
-// 3. El evento CLICK con bloqueo de pestaña duplicada
+// 3. Evento Click corregido
 if (waBtn) {
-    waBtn.addEventListener('click', async (e) => {
-        // ESTO DETIENE LA WEB Y EVITA QUE SE ABRA OTRA PESTAÑA IGUAL
-        e.preventDefault(); 
+    waBtn.addEventListener('click', function(e) {
+        // DETIENE LA WEB ORIGINAL PARA QUE NO SE ABRA OTRA PESTAÑA
+        e.preventDefault();
         e.stopPropagation();
 
         const fbp = getCookie('_fbp') || '';
         const fbc = getCookie('_fbc') || '';
 
-        // Avisamos a Facebook del intento de compra
+        // Avisamos a Facebook
         if (typeof fbq === 'function') {
             fbq('track', 'Purchase', {value: 0, currency: 'USD'});
         }
 
-        // Construimos el mensaje final para Kommo
-        const originalHref = waBtn.href;
+        // Construimos el mensaje para el Salesbot de Kommo
+        const originalHref = this.href;
         const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
 
-        // LANZAMIENTO FORZADO: Esto cierra el navegador y abre la App
-        window.location.replace(nuevoMensaje);
+        // LANZAMIENTO DIRECTO A WHATSAPP
+        window.location.href = nuevoMensaje;
     });
 }
-</script>
-    } catch (e) {
-      console.error('CAPI error', e);
-    }
-  });
 </script>
