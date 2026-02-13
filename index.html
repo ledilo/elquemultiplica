@@ -123,7 +123,6 @@ waBtn.addEventListener('click', async (e) => {
 const originalHref = waBtn.href; 
 const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
 
-// En lugar de window.open, usa esto:
 window.location.href = nuevoMensaje;
 });
     } catch (e) {
