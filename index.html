@@ -82,23 +82,31 @@ function getCookie(name) {
     return m ? m.pop() : '';
 }
 
-// 3. Evento Click corregido
+// ... (Mantienes tu función getCookie arriba)
+
 if (waBtn) {
     waBtn.addEventListener('click', function(e) {
-        // DETIENE LA WEB ORIGINAL PARA QUE NO SE ABRA OTRA PESTAÑA
         e.preventDefault();
         e.stopPropagation();
 
         const fbp = getCookie('_fbp') || '';
         const fbc = getCookie('_fbc') || '';
+        
+        // --- NUEVA PARTE: Capturamos los datos de Meta ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const campana = urlParams.get('utm_campaign') || 'Campaña_Desconocida';
+        const anuncio = urlParams.get('utm_content') || 'Anuncio_Desconocido';
 
-        // Avisamos a Facebook que es un prospecto (Lead)
-if (typeof fbq === 'function') {
-    fbq('track', 'Lead'); 
-}
-        // Construimos el mensaje para el Salesbot de Kommo
+        // 1. Avisamos a Facebook de la conversión (Sin ROAS como pediste)
+        if (typeof fbq === 'function') {
+            fbq('track', 'Purchase'); 
+        }
+
+        // 2. Construimos el mensaje para el Salesbot de Kommo
         const originalHref = this.href;
-        const nuevoMensaje = `${originalHref}%20ID_REF:${fbp}|${fbc}`;
+        
+        // Agregamos la Campaña y el Anuncio al mensaje de WhatsApp
+        const nuevoMensaje = `${originalHref}%20🎯Campaña:${campana}%20🔥Anuncio:${anuncio}%20ID_REF:${fbp}|${fbc}`;
 
         // LANZAMIENTO DIRECTO A WHATSAPP
         window.location.href = nuevoMensaje;
