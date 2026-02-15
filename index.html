@@ -92,22 +92,20 @@ if (waBtn) {
       const fbp = getCookie('_fbp') || '';
       const fbc = getCookie('_fbc') || '';
 
-      // --- CAPTURAMOS LOS DATOS DE META ---
+      // --- AQUÍ CAPTURAMOS LO QUE CONFIGURASTE EN META ---
       const urlParams = new URLSearchParams(window.location.search);
       const campana = urlParams.get('utm_campaign') || 'Campaña_Desconocida';
       const anuncio = urlParams.get('utm_content') || 'Anuncio_Desconocido';
 
-      // 1. Avisamos a Facebook de la conversión (Purchase)
+      // 1. Marcamos la compra en Facebook (Sin ROAS para que no dé error)
       if (typeof fbq === 'function') {
         fbq('track', 'Purchase');
       }
 
-      // 2. Construimos el mensaje para el Salesbot de Kommo
+      // 2. Enviamos el mensaje detallado a Kommo
       const originalHref = this.href;
-      // Aquí unimos los datos de campaña y anuncio al mensaje
       const nuevoMensaje = `${originalHref}%20🎯Campaña:${campana}%20🔥Anuncio:${anuncio}%20ID_REF:${fbp}|${fbc}`;
 
-      // LANZAMIENTO DIRECTO A WHATSAPP
       window.location.href = nuevoMensaje;
     });
   }
