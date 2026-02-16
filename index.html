@@ -86,27 +86,22 @@ function getCookie(name) {
 
 if (waBtn) {
     waBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
+        e.preventDefault();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const anuncio = urlParams.get('utm_content') || 'Desconocido';
 
-      const fbp = getCookie('_fbp') || '';
-      const fbc = getCookie('_fbc') || '';
+        // Marcamos la compra en Facebook
+        if (typeof fbq === 'function') {
+            fbq('track', 'Purchase');
+        }
 
-      // --- AQUÍ CAPTURAMOS LO QUE CONFIGURASTE EN META ---
-      const urlParams = new URLSearchParams(window.location.search);
-      const campana = urlParams.get('utm_campaign') || 'Campaña_Desconocida';
-      const anuncio = urlParams.get('utm_content') || 'Anuncio_Desconocido';
+        // Enviamos el mensaje limpio a Kommo
+        const mensajeCliente = "Hola quiero mi boni";
+        const linkLimpio = `https://wa.me/542617524426?text=${encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio)}`;
 
-      // 1. Marcamos la compra en Facebook (Sin ROAS para que no dé error)
-      if (typeof fbq === 'function') {
-        fbq('track', 'Purchase');
-      }
-
-      // 2. Enviamos el mensaje detallado a Kommo
-      const originalHref = this.href;
-      const nuevoMensaje = `${originalHref}%20🎯Campaña:${campana}%20🔥Anuncio:${anuncio}%20ID_REF:${fbp}|${fbc}`;
-
-      window.location.href = nuevoMensaje;
+        window.location.href = linkLimpio;
     });
+}
   }
 </script>
