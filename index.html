@@ -98,7 +98,7 @@ if (waBtn) {
 
         // Enviamos el mensaje limpio a Kommo
         const mensajeCliente = "Hola quiero más info";
-        const linkLimpio = `https://wa.me/542617524426?text=${encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio)}`;
+        const linkLimpio = 'https://api.whatsapp.com/send?phone=542617524426&text=${encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio)}`;
 
         window.location.href = linkLimpio;
     });
