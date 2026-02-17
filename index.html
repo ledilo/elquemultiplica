@@ -42,7 +42,7 @@
   <!-- Minimo -->
   <div class="minimo">Mínimo de carga: $2000</div>
   <!-- BOTÓN WA -->
-  <a class="btn-wa" onclick="enviarWhatsapp(event)" style="cursor: pointer;">
+  <a class="btn-wa" id="waLink" href="#" onclick="enviarWa(event)">
     <img src="wa-btn.png" alt="WhatsApp">
 </a>
 
@@ -74,34 +74,26 @@ function pickLink() {
 }
 
 const waBtn = document.getElementById('waLink');
-if (waBtn) waBtn.href = pickLink();
-
-// 2. Función para leer cookies de Meta
-function getCookie(name) {
-    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return m ? m.pop() : '';
-}
-
-// ... (Mantienes tu función getCookie arriba)
-
-function enviarWhatsapp(e) {
+function enviarWa(e) {
     e.preventDefault();
+    
+    // 1. Capturar el nombre del anuncio de la URL
+    const params = new URLSearchParams(window.location.search);
+    const anuncio = params.get('utm_content') || 'Desconocido';
 
-    // 1. Capturar el anuncio de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const anuncio = urlParams.get('utm_content') || 'Desconocido';
-
-    // 2. Track de Meta
+    // 2. Disparar el Pixel de Meta (Compra)
     if (typeof fbq === 'function') {
         fbq('track', 'Purchase');
     }
 
-    // 3. Construir link y redireccionar
+    // 3. Crear el mensaje y el número
     const num = "542617524426";
-    const mensaje = encodeURIComponent("Hola quiero más info, ANUNCIO " + anuncio);
+    const msg = "Hola quiero más info, ANUNCIO " + anuncio;
     
-    // Esta forma de abrir es la que mejor funciona en móviles Samsung
-    window.location.href = "https://api.whatsapp.com/send?phone=" + num + "&text=" + mensaje;
+    // 4. REDIRECCIÓN DIRECTA (Solución para Samsung y PC)
+    const urlFinal = "https://api.whatsapp.com/send?phone=" + num + "&text=" + encodeURIComponent(msg);
+    
+    window.location.replace(urlFinal);
 }
   }
 </script>
