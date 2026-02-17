@@ -86,20 +86,26 @@ function getCookie(name) {
 
 if (waBtn) {
     waBtn.addEventListener('click', function(e) {
+        // 1. Detenemos cualquier otra acción del navegador
         e.preventDefault();
+        e.stopPropagation();
         
         const urlParams = new URLSearchParams(window.location.search);
         const anuncio = urlParams.get('utm_content') || 'Desconocido';
 
-        // Marcamos la compra en Facebook
+        // 2. Evento de Facebook
         if (typeof fbq === 'function') {
             fbq('track', 'Purchase');
         }
 
-        // Enviamos el mensaje limpio a Kommo
+        // 3. Construimos el link usando la API (más compatible con Samsung)
         const mensajeCliente = "Hola quiero más info";
-        const linkLimpio = 'https://api.whatsapp.com/send?phone=542617524426&text=${encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio)}`;
+        const num = "542617524426";
+        const textoFinal = encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio);
+        
+        const linkLimpio = `https://api.whatsapp.com/send?phone=${num}&text=${textoFinal}`;
 
+        // 4. Redirigimos en la misma pestaña para evitar bloqueos
         window.location.href = linkLimpio;
     });
 }
