@@ -42,10 +42,9 @@
   <!-- Minimo -->
   <div class="minimo">Mínimo de carga: $2000</div>
   <!-- BOTÓN WA -->
-  <a class="btn-wa" href="javascript:void(0)" id="finalWaBtn">
+<a class="btn-wa" id="botonFinal" href="javascript:void(0)">
     <img src="wa-btn.png" alt="WhatsApp">
 </a>
-
   <footer>
     +18 | Entretenimiento
   </footer>
@@ -66,29 +65,31 @@
   src="https://www.facebook.com/tr?id=944228244845616&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel Code -->
   <script>
-// 1. Configuración de enlace
-const waLinks = ['https://wa.me/542617524426?text=Hola,%20me%20interesa'];
-
-function pickLink() {
-    return waLinks[0];
-}
-
-const waBtn = document.getElementById('waLink');
-document.getElementById('finalWaBtn').addEventListener('click', function(e) {
-    e.preventDefault();
+// 1. Esperamos a que la página cargue
+window.onload = function() {
+    const btn = document.getElementById('botonFinal');
     
-    // Captura el nombre del anuncio de la URL
-    const u = new URLSearchParams(window.location.search);
-    const ad = u.get('utm_content') || 'Desconocido';
+    if (btn) {
+        btn.onclick = function(e) {
+            e.preventDefault();
+            
+            // 2. Capturamos el anuncio de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const anuncio = urlParams.get('utm_content') || 'Desconocido';
 
-    // Pixel de Meta
-    if (typeof fbq === 'function') fbq('track', 'Purchase');
+            // 3. Pixel de Meta (Compra)
+            if (typeof fbq === 'function') {
+                fbq('track', 'Purchase');
+            }
 
-    // Link directo
-    const n = "542617524426";
-    const m = encodeURIComponent("Hola quiero más info, ANUNCIO " + ad);
-    
-    window.location.href = "https://api.whatsapp.com/send?phone=" + n + "&text=" + m;
-});
-  }
+            // 4. Armamos el link directo (Compatible con Samsung y PC)
+            const num = "542617524426";
+            const msg = encodeURIComponent("Hola quiero más info, ANUNCIO " + anuncio);
+            const urlFinal = "https://api.whatsapp.com/send?phone=" + num + "&text=" + msg;
+
+            // 5. Salto directo
+            window.location.href = urlFinal;
+        };
+    }
+};
 </script>
