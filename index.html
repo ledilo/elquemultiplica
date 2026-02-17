@@ -42,7 +42,7 @@
   <!-- Minimo -->
   <div class="minimo">Mínimo de carga: $2000</div>
   <!-- BOTÓN WA -->
-  <a class="btn-wa" id="waLink" href="#" onclick="enviarWa(event)">
+  <a class="btn-wa" href="javascript:void(0)" onclick="enviarWa(event)">
     <img src="wa-btn.png" alt="WhatsApp">
 </a>
 
@@ -75,25 +75,26 @@ function pickLink() {
 
 const waBtn = document.getElementById('waLink');
 function enviarWa(e) {
-    e.preventDefault();
+    // Evita que el navegador intente abrir el "#" o una pestaña extra
+    if (e) e.preventDefault();
     
-    // 1. Capturar el nombre del anuncio de la URL
+    // 1. Capturamos el anuncio de la URL
     const params = new URLSearchParams(window.location.search);
     const anuncio = params.get('utm_content') || 'Desconocido';
 
-    // 2. Disparar el Pixel de Meta (Compra)
+    // 2. Disparar el Pixel (Compra)
     if (typeof fbq === 'function') {
         fbq('track', 'Purchase');
     }
 
-    // 3. Crear el mensaje y el número
+    // 3. Datos de envío
     const num = "542617524426";
     const msg = "Hola quiero más info, ANUNCIO " + anuncio;
     
-    // 4. REDIRECCIÓN DIRECTA (Solución para Samsung y PC)
+    // 4. Salto directo a WhatsApp (Compatible con Samsung y PC)
     const urlFinal = "https://api.whatsapp.com/send?phone=" + num + "&text=" + encodeURIComponent(msg);
     
-    window.location.replace(urlFinal);
+    window.location.href = urlFinal;
 }
   }
 </script>
