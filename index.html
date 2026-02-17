@@ -68,27 +68,22 @@
 // 1. Esperamos a que la página cargue
 window.onload = function() {
     const btn = document.getElementById('botonFinal');
-    
     if (btn) {
         btn.onclick = function(e) {
             e.preventDefault();
             
-            // 2. Capturamos el anuncio de la URL
+            // Captura el nombre que pusiste a mano (ej: ctv4.1)
             const urlParams = new URLSearchParams(window.location.search);
-            const anuncio = urlParams.get('utm_content') || 'Desconocido';
+            const anuncio = urlParams.get('utm_content') || 'General';
 
-            // 3. Pixel de Meta (Compra)
-            if (typeof fbq === 'function') {
-                fbq('track', 'Purchase');
-            }
+            // Registro de conversión
+            if (typeof fbq === 'function') { fbq('track', 'Purchase'); }
 
-            // 4. Armamos el link directo (Compatible con Samsung y PC)
-            const num = "542617524426";
+            const tel = "542617524426";
             const msg = encodeURIComponent("Hola quiero más info, ANUNCIO " + anuncio);
-            const urlFinal = "https://api.whatsapp.com/send?phone=" + num + "&text=" + msg;
-
-            // 5. Salto directo
-            window.location.href = urlFinal;
+            
+            // Redirección directa para evitar pestañas blancas
+            window.location.replace("https://api.whatsapp.com/send?phone=" + tel + "&text=" + msg);
         };
     }
 };
