@@ -84,30 +84,24 @@ function getCookie(name) {
 
 // ... (Mantienes tu función getCookie arriba)
 
-if (waBtn) {
-    waBtn.addEventListener('click', function(e) {
-        // 1. Detenemos cualquier acción automática del botón
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const anuncio = urlParams.get('utm_content') || 'Desconocido';
+function enviarWhatsapp(e) {
+    e.preventDefault();
 
-        // 2. Registro de evento en Meta
-        if (typeof fbq === 'function') {
-            fbq('track', 'Purchase');
-        }
+    // 1. Capturar el anuncio de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const anuncio = urlParams.get('utm_content') || 'Desconocido';
 
-        // 3. Construimos el link de la API (el más estable)
-        const mensajeCliente = "Hola quiero más info";
-        const num = "542617524426";
-        const textoFinal = encodeURIComponent(mensajeCliente + ", ANUNCIO " + anuncio);
-        
-        const linkLimpio = `https://api.whatsapp.com/send?phone=${num}&text=${textoFinal}`;
+    // 2. Track de Meta
+    if (typeof fbq === 'function') {
+        fbq('track', 'Purchase');
+    }
 
-        // 4. Redirección forzada en la misma pestaña
-        window.location.href = linkLimpio;
-    });
+    // 3. Construir link y redireccionar
+    const num = "542617524426";
+    const mensaje = encodeURIComponent("Hola quiero más info, ANUNCIO " + anuncio);
+    
+    // Esta forma de abrir es la que mejor funciona en móviles Samsung
+    window.location.href = "https://api.whatsapp.com/send?phone=" + num + "&text=" + mensaje;
 }
   }
 </script>
